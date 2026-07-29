@@ -62,6 +62,25 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# Expo / React Native
+.expo/
+web-build/
+expo-env.d.ts
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+.metro-health-check*
+*.pem
+.env*.local
+*.tsbuildinfo
+example
+/ios
+/android
+
 # Environment files
 .env
 .env.local
