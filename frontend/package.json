@@ -3,16 +3,21 @@
   "main": "expo-router/entry",
   "version": "1.0.0",
   "dependencies": {
+    "@bkey-inc/bmoni_embedded_sdk": "^0.0.1",
     "@expo/ui": "~57.0.8",
     "expo": "~57.0.9",
+    "expo-audio": "~57.0.3",
     "expo-constants": "~57.0.8",
     "expo-dev-client": "~57.0.10",
     "expo-device": "~57.0.1",
+    "expo-file-system": "~57.0.1",
     "expo-font": "~57.0.1",
     "expo-glass-effect": "~57.0.1",
     "expo-image": "~57.0.1",
     "expo-linking": "~57.0.4",
+    "expo-local-authentication": "~57.0.2",
     "expo-router": "~57.0.9",
+    "expo-secure-store": "~57.0.1",
     "expo-splash-screen": "~57.0.5",
     "expo-status-bar": "~57.0.1",
     "expo-symbols": "~57.0.1",
@@ -30,6 +35,8 @@
   },
   "devDependencies": {
     "@types/react": "~19.2.2",
+    "eslint": "^9.0.0",
+    "eslint-config-expo": "~57.0.1",
     "typescript": "~6.0.3"
   },
   "scripts": {

@@ -4,7 +4,7 @@ import { Fonts, ThemeColor } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
 
 export type ThemedTextProps = TextProps & {
-  type?: 'default' | 'title' | 'small' | 'smallBold' | 'subtitle' | 'link' | 'linkPrimary' | 'code';
+  type?: 'default' | 'title' | 'small' | 'smallBold' | 'subtitle' | 'link' | 'linkPrimary' | 'code' | 'body' | 'bodyBold';
   themeColor?: ThemeColor;
 };
 
@@ -23,6 +23,8 @@ export function ThemedText({ style, type = 'default', themeColor, ...rest }: The
         type === 'link' && styles.link,
         type === 'linkPrimary' && styles.linkPrimary,
         type === 'code' && styles.code,
+        type === 'body' && styles.body,
+        type === 'bodyBold' && styles.bodyBold,
         style,
       ]}
       {...rest}
@@ -31,6 +33,19 @@ export function ThemedText({ style, type = 'default', themeColor, ...rest }: The
 }
 
 const styles = StyleSheet.create({
+  // The accessibility bar this app sets (large text, high contrast) is the
+  // default, not an opt-in mode — 'body' is what every screen should reach
+  // for instead of 'default' (16px, too small for this audience).
+  body: {
+    fontSize: 22,
+    lineHeight: 32,
+    fontWeight: 500,
+  },
+  bodyBold: {
+    fontSize: 22,
+    lineHeight: 32,
+    fontWeight: 700,
+  },
   small: {
     fontSize: 14,
     lineHeight: 20,

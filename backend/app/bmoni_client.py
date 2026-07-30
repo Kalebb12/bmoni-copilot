@@ -212,3 +212,45 @@ class BmoniClient:
             f"/v1/users/{user_id}/smart-wallets/proposals/{proposal_id}/sign",
             json=signature_payload,
         )
+
+    # --- Smart wallet provisioning (owner-proof + create-managed) ------------
+    # Wallet creation itself happens on-device via the frontend's BMONI RN SDK
+    # (bmoni_embedded_sdk); these two calls need the partner API key, so they're
+    # proxied here the same as every other BMONI call.
+
+    async def create_owner_proof_challenge(
+        self, user_id: str, *, currency: str, user_owner_address: str
+    ) -> dict[str, Any]:
+        """Returns a short-lived EIP-191 message that `user_owner_address` must
+        sign (via the RN SDK's `signMessage`) before calling
+        `create_managed_smart_wallet`.
+        """
+        return await self._request(
+            "POST",
+            f"/v1/users/{user_id}/smart-wallets/owner-proof-challenges",
+            json={"currency": currency, "userOwnerAddress": user_owner_address},
+        )
+
+    async def create_managed_smart_wallet(
+        self,
+        user_id: str,
+        *,
+        currency: str,
+        user_owner_address: str,
+        owner_proof_challenge_id: str,
+        owner_proof_signature: str,
+    ) -> dict[str, Any]:
+        """Creates (or reuses, for an existing treasury) a managed smart wallet
+        for `currency`, registering `user_owner_address` as an owner alongside
+        BMONI's KMS custodian. Consumes the owner-proof challenge.
+        """
+        return await self._request(
+            "POST",
+            f"/v1/users/{user_id}/smart-wallets/create-managed",
+            json={
+                "currency": currency,
+                "userOwnerAddress": user_owner_address,
+                "ownerProofChallengeId": owner_proof_challenge_id,
+                "ownerProofSignature": owner_proof_signature,
+            },
+        )

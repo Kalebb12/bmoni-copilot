@@ -12,6 +12,7 @@ Route groups:
 """
 
 from datetime import datetime, timedelta, timezone
+from typing import Any
 
 
 def _utcnow() -> datetime:
@@ -398,3 +399,45 @@ async def start_nigeria_onboarding(
     return await client.start_nigeria_onboarding(
         user_id, bvn=bvn, ngn_wallet_address=ngn_wallet_address, ngn_wallet_index=ngn_wallet_index
     )
+
+
+# --- BMONI smart wallet provisioning (owner-proof + create-managed) -----------------
+# Wallet creation/signing itself happens on-device via the frontend's BMONI RN SDK;
+# these two calls need the partner API key so they're proxied like everything else.
+
+
+@app.post("/bmoni/users/{user_id}/smart-wallets/owner-proof-challenge")
+async def create_owner_proof_challenge(
+    user_id: str, currency: str, user_owner_address: str, client: BmoniClient = Depends(get_bmoni_client)
+) -> dict:
+    return await client.create_owner_proof_challenge(
+        user_id, currency=currency, user_owner_address=user_owner_address
+    )
+
+
+@app.post("/bmoni/users/{user_id}/smart-wallets/create-managed")
+async def create_managed_smart_wallet(
+    user_id: str,
+    currency: str,
+    user_owner_address: str,
+    owner_proof_challenge_id: str,
+    owner_proof_signature: str,
+    client: BmoniClient = Depends(get_bmoni_client),
+) -> dict:
+    return await client.create_managed_smart_wallet(
+        user_id,
+        currency=currency,
+        user_owner_address=user_owner_address,
+        owner_proof_challenge_id=owner_proof_challenge_id,
+        owner_proof_signature=owner_proof_signature,
+    )
+
+
+@app.post("/bmoni/users/{user_id}/smart-wallets/proposals/{proposal_id}/sign")
+async def submit_proposal_signature(
+    user_id: str,
+    proposal_id: str,
+    signature_payload: dict[str, Any],
+    client: BmoniClient = Depends(get_bmoni_client),
+) -> dict:
+    return await client.submit_proposal_signature(user_id, proposal_id, signature_payload)
