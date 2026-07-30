@@ -13,6 +13,7 @@ import { useSession } from '@/context/SessionContext';
 import { TEST_BVN } from '@/constants/config';
 import { Spacing } from '@/constants/theme';
 import { api, ApiError } from '@/lib/api';
+import { toNigerianE164 } from '@/lib/phone';
 
 export default function OnboardingStart() {
   const { setBmoniUserId, setPhoneNumber: setSessionPhoneNumber } = useSession();
@@ -33,7 +34,7 @@ export default function OnboardingStart() {
         first_name: firstName.trim(),
         last_name: lastName.trim() || undefined,
         email: email.trim(),
-        phone_number: phoneNumber.trim(),
+        phone_number: toNigerianE164(phoneNumber),
         bvn: TEST_BVN,
       });
       await setBmoniUserId(user.id);
