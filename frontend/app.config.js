@@ -43,17 +43,7 @@ module.exports = {
           faceIDPermission: 'Unlock your account with Face ID instead of typing a passcode.',
         },
       ],
-      [
-        'expo-build-properties',
-        {
-          // @bkey-inc/bmoni_embedded_sdk resolves me.bkey.ip:bmonisigner on the
-          // app's own runtime classpath — the library can't declare this
-          // repository for itself, see its README's Android setup section.
-          android: {
-            extraMavenRepos: ['https://bkey-inc.github.io/package-distribution/maven'],
-          },
-        },
-      ],
+      './plugins/withBkeyMavenRepo',
     ],
     experiments: {
       typedRoutes: true,
